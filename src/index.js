@@ -7,9 +7,23 @@ import App from "./App";
 
 import "./index.css";
 
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link
+const cache = new InMemoryCache();
+
+export const isLoggedInVar = cache.makeVar(true);
+
+cache.policies.addTypePolicies({
+  Query: {
+    fields: {
+      isLoggedIn() {
+        return isLoggedInVar();
+      },
+    },
+  },
+});
+
+export const client = new ApolloClient({
+  cache,
+  link,
 });
 
 render(
